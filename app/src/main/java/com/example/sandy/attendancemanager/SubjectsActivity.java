@@ -3,6 +3,7 @@ package com.example.sandy.attendancemanager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,10 +33,9 @@ public class SubjectsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subjects);
 
-
-
         //INITIALIZING VARIABLES
         subNameTxt = (EditText) findViewById(R.id.subject_name);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         addBtn = (Button) findViewById(R.id.add_btn);
         deleteBtn = (Button) findViewById(R.id.delete_btn);
         mHelper = new SubjectsDbHelper(this,null,null,1);
@@ -96,38 +96,6 @@ public class SubjectsActivity extends AppCompatActivity{
         }
     }
 
-
-    //METHOD FOR UPDATING THE SUBJECTS
-  /*  private void updateSubject(){
-        String name = subNameTxt.getText().toString().trim().toUpperCase();//TO GET THE NAME OF SELECTED SUBJECT
-        int pos = lv.getCheckedItemPosition();//TO GET THE POSITION
-
-        if(pos == -1){
-            Toast.makeText(getApplicationContext(), "Select something to update" , Toast.LENGTH_SHORT).show();
-        }
-
-        if(!name.isEmpty() && name.length()>0 && !subjects.contains(name) && pos > -1 ){
-
-            subjectsAdapter.remove(subjects.get(pos));
-
-            mHelper.updateSubjectInDb(name);
-            subjectsAdapter.insert(name, pos);
-            //REFRESHING
-            subjectsAdapter.notifyDataSetChanged();
-
-            subNameTxt.setText("");
-
-            Toast.makeText(getApplicationContext(), "Updated " + name, Toast.LENGTH_SHORT).show();
-        }
-        else if(subjects.contains(name)){
-            Toast.makeText(getApplicationContext(), "The subject is already entered " + name, Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Nothing to Update" , Toast.LENGTH_SHORT).show();
-        }
-    } */
-
-
     //AND FOR DELETING THE SUBJECTS
     private void deleteSubject(){
         String name = subNameTxt.getText().toString().trim().toUpperCase();
@@ -137,14 +105,16 @@ public class SubjectsActivity extends AppCompatActivity{
             Toast.makeText(getApplicationContext(), "Select something to delete" , Toast.LENGTH_SHORT).show();
         }
 
-        if(pos > -1){
+        else if(pos > -1){
             subjectsAdapter.remove(subjects.get(pos));
             mHelper.deleteSubjectInDb(name);
 
             subjectsAdapter.notifyDataSetChanged();
 
             subNameTxt.setText("");
+            lv.setItemChecked(-1,true);
             Toast.makeText(getApplicationContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+
         }
         else {
             Toast.makeText(getApplicationContext(), "Nothing to Delete" , Toast.LENGTH_SHORT).show();
